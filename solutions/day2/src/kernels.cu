@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "kernels.h"
+#include "kernels.cuh"
 
 __global__ void myKernel()
 {

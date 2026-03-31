@@ -1,8 +1,9 @@
 #include <cuda_runtime.h>
 #include <stdio.h>
+#include <math.h>
 #include "cuda_utils.h"
 
-__global__ void vectorAdd(float *A, float *B, float *C, int N) 
+__global__ void vectorAdd(float *A, float *B, float *C, int N)
 {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -24,7 +25,7 @@ bool is_equal(float *d_arr, float *h_arr, int N)
 {
     for (int i = 0; i < N; i++)
     {
-        if (abs(d_arr[i] - h_arr[i]) > 1E-8) 
+        if (fabsf(d_arr[i] - h_arr[i]) > 1E-8)
         {
             return false;
         }

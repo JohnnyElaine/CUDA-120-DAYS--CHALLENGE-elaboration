@@ -11,15 +11,13 @@ cmake --build build
 ```
 run using.
 ```cmd
-.\build\gpu_app.exe
-.\build\cpu_app.exe
+.\build\vector_add.exe
+.\build\matrix_add.exe
+.\build\matrix_mult.exe
 ```
 ## Optional: Build and run
 ```cmd
-cmake --build build --target run_cpu
-cmake --build build --target run_gpu
+cmake --build build --target run_vector_add
+cmake --build build --target run_matrix_add
+cmake --build build --target run_matrix_mult
 ```
-
-# Results
-- **CPU Vector Add Time:** 55ms
-- **GPU Vector Add Time:** 5ms

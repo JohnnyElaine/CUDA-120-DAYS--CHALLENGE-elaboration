@@ -1,5 +1,5 @@
 #include <cuda_runtime.h>
-#include "kernels.h"
+#include "kernels.cuh"
 
 int main()
 {

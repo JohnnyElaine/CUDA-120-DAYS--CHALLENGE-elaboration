@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <cuda_runtime.h>
+#include <stdlib.h>
 #include <ctime>
 
 #define CUDA_CHECK(expr_to_check) do {            \

@@ -50,6 +50,22 @@ target_compile_options(vector_add PRIVATE
 )
 
 # -------------------------
+# Matrix Addition executable
+# -------------------------
+add_executable(matrix_add
+    src/matrix_add.cu
+)
+
+target_include_directories(matrix_add PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
+)
+
+target_compile_options(matrix_add PRIVATE
+    $<$<COMPILE_LANGUAGE:CXX>:${HOST_COMPILER_FLAGS}>
+    $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_COMPILER_FLAGS}>
+)
+
+# -------------------------
 # Matrix Multiplication executable
 # -------------------------
 add_executable(matrix_mult
@@ -73,6 +89,10 @@ add_custom_target(run_vector_add
     DEPENDS vector_add
 )
 
+add_custom_target(run_matrix_add
+    COMMAND $<TARGET_FILE:matrix_add>
+    DEPENDS matrix_mult
+)
 add_custom_target(run_matrix_mult
     COMMAND $<TARGET_FILE:matrix_mult>
     DEPENDS matrix_mult
