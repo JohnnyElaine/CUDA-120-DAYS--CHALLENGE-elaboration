@@ -36,7 +36,7 @@ Matrix *matrixAddCPU(const Matrix *A, const Matrix *B)
     {
         for (size_t col = 0; col < A->width; col++)
         {
-            int i = row * C->width + col;
+            size_t i = row * C->width + col;
             C->data[i] = A->data[i] + B->data[i];
         }
     }
@@ -56,8 +56,9 @@ void initMatrixValues(Matrix *M, float base)
     }
 }
 
-void compareMatricies(Matrix *A, Matrix *B)
+bool compareMatricies(Matrix *A, Matrix *B)
 {
+	bool isMatching = true;
     for (size_t row = 0; row < A->height; row++)
     {
         for (size_t col = 0; col < A->width; col++)
@@ -65,10 +66,12 @@ void compareMatricies(Matrix *A, Matrix *B)
             size_t i = row * A->width + col;
             if (fabsf(A->data[i] - B->data[i]) > 1E-8)
             {
-                printf("Matricies at row=%d, column=%d do not match!\n", row, col);
+                printf("Matricies at row=%zu, column=%zu do not match!\n", row, col);
+				isMatching = false;
             }
         }
     }
+	return isMatching;
 }
 
 bool verifyMatricies(Matrix *A, Matrix *B){
@@ -96,8 +99,8 @@ void printMatrix(Matrix *M)
 
 int main() 
 {
-    size_t height = 8;
-    size_t width = 8;
+    size_t height = 1024;
+    size_t width = 1024;
     size_t N = height * width;
 	size_t bytes = N * sizeof(float);
     Matrix h_A, h_B, h_C;
@@ -129,7 +132,7 @@ int main()
     dim3 threadsPerBlock(THREAD_BLOCK_SIZE, THREAD_BLOCK_SIZE);
     // same as cuda::ceil_div(width / threadsPerBlock)
     // same as cuda::ceil_div(height / threadsPerBlock)
-    dim3 blocksPerGrid((width + threadsPerBlock.x - 1) / threadsPerBlock.x, (height + threadsPerBlock.y - 1) / threadsPerBlock.y);
+    dim3 blocksPerGrid((int)(width + threadsPerBlock.x - 1) / threadsPerBlock.x, (int)(height + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
     matrixAddGPU<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, h_C.height, h_C.width);
 
@@ -139,14 +142,19 @@ int main()
 
 	CUDA_CHECK(cudaMemcpy(h_C.data, d_C, bytes, cudaMemcpyDeviceToHost));
 
-    compareMatricies(h_cpu_C, &h_C);
+    if (compareMatricies(h_cpu_C, &h_C))
+	{
+		printf("Matricies match!.\n");
+	}
 
+	/*
 	printf("Matrix A:\n");
 	printMatrix(&h_A);
 	printf("Matrix B:\n");
 	printMatrix(&h_B);
 	printf("Result Matrix C (A + B):\n");
 	printMatrix(&h_C);
+	*/
 
     cudaFree(d_A);
     cudaFree(d_B);
