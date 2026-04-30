@@ -55,6 +55,7 @@ target_compile_options(vector_add PRIVATE
 add_executable(matrix_add
     src/matrix_add.cu
     src/matrix.cpp
+    src/matrix_operations_kernels.cu
 )
 
 target_include_directories(matrix_add PRIVATE
@@ -72,6 +73,7 @@ target_compile_options(matrix_add PRIVATE
 add_executable(matrix_mult
     src/matrix_mult.cu
     src/matrix.cpp
+    src/matrix_operations_kernels.cu
 )
 
 target_include_directories(matrix_mult PRIVATE

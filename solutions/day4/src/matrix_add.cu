@@ -4,19 +4,10 @@
 #include <math.h>
 #include "cuda_utils.h"
 #include "matrix.h"
+#include "matrix_operations_kernels.cuh"
 
 #define TILE_SIZE 16
 
-__global__ void matrixAddKernel(const float *A, const float *B, float *C, const unsigned int height, const unsigned int width)
-{
-    size_t x = blockIdx.x * blockDim.x + threadIdx.x;
-    size_t y = blockIdx.y * blockDim.y + threadIdx.y;
-    size_t i = y * width + x;
-    
-    if (y >= height || x >= width) return;
-    
-    C[i] = A[i] + B[i];
-}
 
 int main() 
 {

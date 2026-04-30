@@ -1,8 +1,6 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include <stdio.h>
-
 // row major matrix
 typedef struct {
     size_t height;
